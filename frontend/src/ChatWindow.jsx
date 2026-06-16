@@ -1,13 +1,13 @@
 import "./ChatWindow.css";
 import Chat from "./Chat.jsx";
 import { MyContext } from "./MyContext.jsx";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import {ScaleLoader} from "react-spinners";
 
 
 function ChatWindow(){
   
-  const {prompt, setPrompt, reply, setReply, currThreadId} = useContext(MyContext);
+  const {prompt, setPrompt, reply, setReply, currThreadId, prevChats, setprevChats} = useContext(MyContext);
   const [loading, setLoading] = useState(false);
 
   const getReply = async () =>{
@@ -33,6 +33,22 @@ function ChatWindow(){
      setLoading(false);
   }
 
+//Appending new chat to prevChats
+   useEffect(() =>{
+     if(prompt && reply){
+      setprevChats(prevChats =>(
+        [...prevChats, {
+          role:"user",
+          content: prompt
+        },{
+          role:"assistant",
+          content: reply
+        }]
+      ));
+    }
+
+    setPrompt("");
+   },[reply])
 
   return (
     <div className="chatWindow">
