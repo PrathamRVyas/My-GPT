@@ -12,13 +12,15 @@ function App() {
   const [currThreadId, setCurrThreadId] = useState(uuidv1());
   const [prevChats, setprevChats] = useState([]);
   const [newChat, setnewChat] = useState(true);
+  const [allThreads, setAllThreads] = useState([]);
 
   const providerValues = {
     prompt, setPrompt,
     reply, setReply,
     currThreadId, setCurrThreadId,
     newChat, setnewChat,
-    prevChats, setprevChats
+    prevChats, setprevChats,
+    allThreads, setAllThreads
   };
 
   return (

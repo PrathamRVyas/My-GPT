@@ -7,11 +7,14 @@ import {ScaleLoader} from "react-spinners";
 
 function ChatWindow(){
   
-  const {prompt, setPrompt, reply, setReply, currThreadId, prevChats, setprevChats} = useContext(MyContext);
+  const {prompt, setPrompt, reply, setReply, currThreadId, prevChats, setprevChats, newChat, setnewChat} = useContext(MyContext);
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const getReply = async () =>{
     setLoading(true);
+    setnewChat(false);
+    
     const options = {
       method: "POST",
       headers: {
@@ -50,17 +53,40 @@ function ChatWindow(){
     setPrompt("");
    },[reply])
 
+   useEffect(() => {
+  if (newChat) {
+    setprevChats([]);
+    setReply(null);
+    setPrompt("");
+    setnewChat(false);
+  }
+}, [newChat]);
+
+
+const handleProfileClick = () =>{
+   setIsOpen(!isOpen);
+}
+
   return (
     <div className="chatWindow">
 
       <div className="navbar">
         <span>MyGPT <i className="fa-solid fa-angle-down"></i></span>
-        <div className="userIconDiv">
+        <div className="userIconDiv" onClick={handleProfileClick}>
           <span className="userIcon"><i className="fa-regular fa-user"></i></span>
           </div>
       </div>  
+      {
+          isOpen &&
+          <div className="dropDown">
+             <div className="dropDownItems"><i class="fa-solid fa-gear"></i>Settings</div>
+            <div className="dropDownItems"><i class="fa-regular fa-circle-up"></i>Upgrade Plan</div>
+            <div className="dropDownItems"><i class="fa-solid fa-right-from-bracket"></i>Log out</div>
+          </div>
 
-      <Chat></Chat>
+      }
+
+      {prevChats.length > 0 && <Chat />}
       <ScaleLoader color="#fff" loading={loading}>
 
       </ScaleLoader>
